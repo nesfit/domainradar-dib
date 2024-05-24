@@ -1,0 +1,15 @@
+argparse~=1.4.0
+whoisit~=2.7.7
+#whois
+dnspython~=2.6.1
+requests~=2.32.2
+urllib3~=2.2.1
+icmplib~=3.0.4
+pymongo~=4.7.2
+geoip2~=4.8.0
+python-dotenv~=1.0.0
+pyOpenSSL~=23.3.0
+pymisp~=2.4.171
+click~=8.1.7
+whoisdomain~=1.20240129.1
+tldextract~=5.1.2
