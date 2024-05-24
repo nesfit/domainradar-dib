@@ -9,15 +9,15 @@ load_dotenv()
 
 class Config:
     # Base timeout for remote requests, in seconds
-    TIMEOUT = 3
+    TIMEOUT = 5
     # Maximum time to wait for a TLS handshake, in seconds
-    TLS_TIMEOUT = 5
+    TLS_TIMEOUT = 10
     # Number of retries for non-blocking TLS connections
     TLS_NONBLOCKING_RETRIES = 10
     # DNS servers to use for resolving
     DNS_SERVERS = ['193.17.47.1', '185.43.135.1']
     # DNS record types to resolve
-    DNS_RECORD_TYPES = ('A', 'AAAA', 'SOA', 'CNAME', 'MX', 'NS', 'TXT', 'NAPTR')
+    DNS_RECORD_TYPES = ('A', 'AAAA', 'SOA', 'CNAME', 'MX', 'NS', 'TXT')
     # DNS record types to collect IPs from
     COLLECT_IPS_FROM = ('A', 'AAAA', 'CNAME')
     # If true, the ICMP resolver will run in privileged mode
@@ -33,7 +33,7 @@ class Config:
     # Entries to process in one batch
     PROCESSING_BATCH_SIZE = 100
     # Number of results to put in a buffer before writing to MongoDB
-    MONGO_WRITE_BATCH_SIZE = 25
+    MONGO_WRITE_BATCH_SIZE = 50
     # Maximum time to wait for a batch to be processed, in seconds
     TIMEOUT_PER_BATCH = PROCESSING_BATCH_SIZE * 4
     # Maximum time that the collection process may run without any progress before being killed, in seconds
