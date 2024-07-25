@@ -25,9 +25,9 @@ import requests
 import nest_asyncio
 nest_asyncio.apply()
 
-mode = 'malign'  # You can change this to 'benign' to read from the benign dataset
-input_mode = 'parquet'  # You can change this to 'txt'
-batch_size = 20000 # Maximum of api calls for VirusTotal, current academic api is 20k per day
+mode = 'malign'  # You can change this to 'benign' to read from the malign dataset
+input_mode = 'txt'  # You can change this to 'parquet'
+batch_size = 500 # Maximum of api calls for VirusTotal, current academic api is 20k per day, the provided api key is only for 500 calls per day
 
 
 def setup_logging():
@@ -279,13 +279,14 @@ class DomainAnalyzer:
 
         # Define the paths for the input files based on the input mode and mode
         paths = {
+            #define files for benign and malign modes
             'parquet': {
-                'malign': 'malware.parquet',
-                'benign': 'benign.parquet'
+                'malign': 'example_data/example.parquet',
+                'benign': 'example_data/example.parquet'
             },
             'txt': {
-                'malign': 'malign.txt',
-                'benign': 'benign.txt',
+                'malign': 'example_data/example.txt',
+                'benign': 'example_data/example.txt',
             }
         }
 
