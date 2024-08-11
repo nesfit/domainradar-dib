@@ -52,7 +52,7 @@ To execute the entire domain processing pipeline, follow these steps:
 
 2. **Identify Common Domains Across Months**
    ```bash
-   bash find_common_domains.sh
+   bash cesnet_common_domains.sh
    ```
 
 3. **Suffix Reduction**
