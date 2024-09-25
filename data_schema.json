@@ -1,0 +1,1591 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "_id": {
+      "title": "Object ID container",
+      "description": "An object that contains a unique object ID",
+      "type": "object",
+      "properties": {
+        "$oid": {
+          "title": "Object ID",
+          "description": "The unique object ID for this entry",
+          "type": "string"
+        }
+      },
+      "required": [
+        "$oid"
+      ]
+    },
+    "domain_name": {
+      "title": "Domain Mame",
+      "type": "string"
+    },
+    "url": {
+      "title": "Original URL",
+      "description": "The original URL from which the domain name was extracted",
+      "type": "string"
+    },
+    "evaluated_on": {
+      "title": "Entry Evaluation Timestamp",
+      "type": "object",
+      "properties": {
+        "$date": {
+          "description": "The date and time of when the entry was first processed by the collector (ISO8601-formatted, in UTC)",
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "$date"
+      ]
+    },
+    "source": {
+      "title": "Entry Source Identifier",
+      "description": "The identifier of the source that provided the domain name",
+      "type": "string"
+    },
+    "sourced_on": {
+      "title": "Domain Ingestion Timestamp",
+      "type": "object",
+      "properties": {
+        "$date": {
+          "description": "The date and time of when the entry was loaded from the source (ISO8601-formatted, in UTC)",
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "$date"
+      ]
+    },
+    "dns": {
+      "title": "DNS Data",
+      "type": "object",
+      "properties": {
+        "A": {
+          "description": "Array of IPv4 addresses associated with the domain name. Null if no records were found.",
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "AAAA": {
+          "description": "Array of IPv6 addresses associated with the domain name. Null if no records were found.",
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "CNAME": {
+          "description": "The single canonical name associated with the domain name. Null if a CNAME record was not found.",
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "description": "The canonical name associated with the domain name",
+                  "type": "string"
+                },
+                "related_ips": {
+                  "description": "Array of IPv4 and IPv6 addresses resolved for the canonical name through a public resolver (non-authoritative data)",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "ttl": {
+                        "title": "TTL",
+                        "type": "integer"
+                      },
+                      "value": {
+                        "title": "IPv4 or IPv6",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "ttl",
+                      "value"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "related_ips",
+                "value"
+              ]
+            }
+          ]
+        },
+        "MX": {
+          "description": "Array of objects that describe the associated MX records. Null if no records were found.",
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "description": "When MX records are available, the MX object will contain several properties whose keys are the MX names and the values are objects that describe the individual records",
+              "type": "object",
+              "patternProperties": {
+                ".*": {
+                  "type": "object",
+                  "properties": {
+                    "priority": {
+                      "title": "MX priority",
+                      "type": "integer"
+                    },
+                    "related_ips": {
+                      "description": "Array of IPv4 and IPv6 addresses resolved for the MX name through a public resolver (non-authoritative data)",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "ttl": {
+                            "title": "TTL",
+                            "type": "integer"
+                          },
+                          "value": {
+                            "title": "IPv4 or IPv6",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "ttl",
+                          "value"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "related_ips",
+                    "priority"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "NS": {
+          "description": "Array of objects that describe the associated NS records. Null if no records were found.",
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "description": "When NS records are available, the NS object will contain several properties whose keys are the NS names and the values are objects that describe the individual records",
+              "type": "object",
+              "patternProperties": {
+                ".*": {
+                  "type": "object",
+                  "properties": {
+                    "related_ips": {
+                      "description": "Array of IPv4 and IPv6 addresses resolved for the NS name through a public resolver (non-authoritative data)",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "ttl": {
+                            "title": "TTL",
+                            "type": "integer"
+                          },
+                          "value": {
+                            "title": "IPv4 or IPv6",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "ttl",
+                          "value"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "related_ips"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "TXT": {
+          "description": "Array of string values from the TXT records. Null if no records were found.",
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "SOA": {
+          "description": "The SOA record that corresponds to the input domain name. If the name is a subdomain, this should be null.",
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "primary_ns": {
+                  "type": "string"
+                },
+                "resp_mailbox_dname": {
+                  "type": "string"
+                },
+                "serial": {
+                  "type": "integer"
+                },
+                "refresh": {
+                  "type": "integer"
+                },
+                "retry": {
+                  "type": "integer"
+                },
+                "expire": {
+                  "type": "integer"
+                },
+                "min_ttl": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "expire",
+                "min_ttl",
+                "primary_ns",
+                "refresh",
+                "resp_mailbox_dname",
+                "retry",
+                "serial"
+              ]
+            }
+          ]
+        },
+        "zone_SOA": {
+          "description": "The SOA record of the zone determined for the input domain name. If the name is a not subdomain, this should be null and the SOA field should be populated instead. Sometimes, the nameserver returned a different SOA for the two performed queries, and in that case, both zone_SOA and SOA are populated.",
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "primary_ns": {
+                  "type": "string"
+                },
+                "resp_mailbox_dname": {
+                  "type": "string"
+                },
+                "serial": {
+                  "type": "integer"
+                },
+                "refresh": {
+                  "type": "integer"
+                },
+                "retry": {
+                  "type": "integer"
+                },
+                "expire": {
+                  "type": "integer"
+                },
+                "min_ttl": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "expire",
+                "min_ttl",
+                "primary_ns",
+                "refresh",
+                "resp_mailbox_dname",
+                "retry",
+                "serial"
+              ]
+            }
+          ]
+        },
+        "dnssec": {
+          "description": "The scanner checks whether DNSSEC signatures exist and are valid 'locally', according to the DNSKEY found in the zone. These enum values indicate the DNSSEC status for each RRtype.",
+          "type": "object",
+          "properties": {
+            "A": {
+              "$ref": "#/$defs/dnssecType"
+            },
+            "AAAA": {
+              "$ref": "#/$defs/dnssecType"
+            },
+            "SOA": {
+              "$ref": "#/$defs/dnssecType"
+            },
+            "CNAME": {
+              "$ref": "#/$defs/dnssecType"
+            },
+            "MX": {
+              "$ref": "#/$defs/dnssecType"
+            },
+            "NS": {
+              "$ref": "#/$defs/dnssecType"
+            },
+            "TXT": {
+              "$ref": "#/$defs/dnssecType"
+            },
+            "NAPTR": {
+              "$ref": "#/$defs/dnssecType"
+            }
+          },
+          "required": [
+            "A",
+            "AAAA",
+            "CNAME",
+            "MX",
+            "NAPTR",
+            "NS",
+            "SOA",
+            "TXT"
+          ]
+        },
+        "remarks": {
+          "description": "Additional metadata about the DNS scan",
+          "type": "object",
+          "properties": {
+            "has_dnskey": {
+              "description": "Flag indicating that a DNSKEY record was found",
+              "type": "boolean"
+            },
+            "zone_dnskey_selfsign_ok": {
+              "description": "Flag indicating that the RRsig of the DNSKEY record corresponds to the DNSKEY record",
+              "type": "boolean"
+            },
+            "zone": {
+              "description": "The domain name of the zone determined for the input domain name",
+              "type": "string"
+            },
+            "has_spf": {
+              "description": "Flag indicating that an SPF TXT record was found",
+              "type": "boolean"
+            },
+            "has_dmarc": {
+              "description": "Flag indicating that a DMARC TXT record was found",
+              "type": "boolean"
+            },
+            "has_dkim": {
+              "description": "Flag indicating that a DKIM TXT record was found",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "has_dnskey",
+            "zone",
+            "zone_dnskey_selfsign_ok"
+          ]
+        },
+        "sources": {
+          "description": "The scanner first tries to resolve from the primary NS. In case of failures, it falls back to a public recursive resolver. These enum values indicate the source of the data for each RRtype.",
+          "type": "object",
+          "properties": {
+            "A": {
+              "$ref": "#/$defs/resolvedRecordSourceType"
+            },
+            "AAAA": {
+              "$ref": "#/$defs/resolvedRecordSourceType"
+            },
+            "SOA": {
+              "$ref": "#/$defs/resolvedRecordSourceType"
+            },
+            "CNAME": {
+              "$ref": "#/$defs/resolvedRecordSourceType"
+            },
+            "MX": {
+              "$ref": "#/$defs/resolvedRecordSourceType"
+            },
+            "NS": {
+              "$ref": "#/$defs/resolvedRecordSourceType"
+            },
+            "TXT": {
+              "$ref": "#/$defs/resolvedRecordSourceType"
+            },
+            "NAPTR": {
+              "$ref": "#/$defs/resolvedRecordSourceType"
+            }
+          },
+          "required": [
+            "A",
+            "AAAA",
+            "CNAME",
+            "MX",
+            "NAPTR",
+            "NS",
+            "SOA",
+            "TXT"
+          ]
+        },
+        "ttls": {
+          "description": "The TTL values for all resolved RRsets. 0 if the RRtype was not found.",
+          "type": "object",
+          "properties": {
+            "A": {
+              "type": "integer"
+            },
+            "AAAA": {
+              "type": "integer"
+            },
+            "SOA": {
+              "type": "integer"
+            },
+            "CNAME": {
+              "type": "integer"
+            },
+            "MX": {
+              "type": "integer"
+            },
+            "NS": {
+              "type": "integer"
+            },
+            "TXT": {
+              "type": "integer"
+            },
+            "NAPTR": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "A",
+            "AAAA",
+            "CNAME",
+            "MX",
+            "NAPTR",
+            "NS",
+            "SOA",
+            "TXT"
+          ]
+        }
+      },
+      "required": [
+        "A",
+        "AAAA",
+        "CNAME",
+        "MX",
+        "NS",
+        "SOA",
+        "TXT",
+        "zone_SOA"
+      ]
+    },
+    "rdap": {
+      "title": "RDAP or WHOIS Data",
+      "description": "Data fetched from RDAP or WHOIS services. Refer to the RDAP RFCs for more information on their semantics.",
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "handle": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "whois_server": {
+              "type": "string"
+            },
+            "terms_of_service_url": {
+              "type": "string"
+            },
+            "copyright_notice": {
+              "type": "string"
+            },
+            "description": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "last_changed_date": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "$date": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "$date"
+                  ]
+                }
+              ]
+            },
+            "registration_date": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "$date": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "$date"
+                  ]
+                }
+              ]
+            },
+            "expiration_date": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "$date": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "$date"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "type": "string"
+            },
+            "entities": {
+              "title": "RDAP Entities",
+              "description": "Array of objects that describe the entities fetched from RDAP. If WHOIS was used, only 'registrar', 'abuse', 'registrant', and 'admin' will be present. The properties defined below are examples that occur frequently but are not exhaustive.",
+              "type": "object",
+              "properties": {
+                "registrar": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/rdapEntity"
+                  }
+                },
+                "abuse": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/rdapEntity"
+                  }
+                },
+                "registrant": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/rdapEntity"
+                  }
+                },
+                "admin": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/rdapEntity"
+                  }
+                },
+                "administrative": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/rdapEntity"
+                  }
+                },
+                "technical": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/rdapEntity"
+                  }
+                }
+              },
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/rdapEntity"
+                }
+              }
+            },
+            "nameservers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "status": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "dnssec": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "copyright_notice",
+            "description",
+            "entities",
+            "expiration_date",
+            "handle",
+            "last_changed_date",
+            "name",
+            "nameservers",
+            "registration_date",
+            "status",
+            "terms_of_service_url",
+            "url",
+            "whois_server"
+          ]
+        }
+      ]
+    },
+    "tls": {
+      "title": "TLS Handshake and Certificate Data",
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "cipher": {
+              "type": "string"
+            },
+            "count": {
+              "type": "integer"
+            },
+            "protocol": {
+              "type": "string"
+            },
+            "certificates": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "common_name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "organization": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "country": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "validity_start": {
+                    "type": "object",
+                    "properties": {
+                      "$date": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "$numberLong": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "$numberLong"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "$date"
+                    ]
+                  },
+                  "validity_end": {
+                    "type": "object",
+                    "properties": {
+                      "$date": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "$date"
+                    ]
+                  },
+                  "valid_len": {
+                    "type": "integer"
+                  },
+                  "extensions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "critical": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": [
+                            "null",
+                            "string"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "critical",
+                        "name",
+                        "value"
+                      ]
+                    }
+                  },
+                  "extension_count": {
+                    "type": "integer"
+                  },
+                  "is_root": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "common_name",
+                  "country",
+                  "extension_count",
+                  "extensions",
+                  "is_root",
+                  "organization",
+                  "valid_len",
+                  "validity_end",
+                  "validity_start"
+                ]
+              }
+            }
+          },
+          "required": [
+            "certificates",
+            "cipher",
+            "count",
+            "protocol"
+          ]
+        }
+      ]
+    },
+    "remarks": {
+      "type": "object",
+      "properties": {
+        "dns_evaluated_on": {
+          "title": "DNS Scan Timestamp",
+          "type": "object",
+          "properties": {
+            "$date": {
+              "description": "The date and time of when the DNS scan was performed (ISO8601-formatted, in UTC)",
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": [
+            "$date"
+          ]
+        },
+        "rdap_evaluated_on": {
+          "title": "RDAP/WHOIS Fetch Timestamp",
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "$date": {
+                  "description": "The date and time of when the RDAP/WHOIS data were fetched (ISO8601-formatted, in UTC)",
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "$date"
+              ]
+            }
+          ]
+        },
+        "tls_evaluated_on": {
+          "title": "TLS Fetch Timestamp",
+          "type": "object",
+          "properties": {
+            "$date": {
+              "description": "The date and time of when the TLS data were fetched (ISO8601-formatted, in UTC)",
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": [
+            "$date"
+          ]
+        },
+        "dns_had_no_ips": {
+          "title": "No IPs Found Flag",
+          "description": "Flag indicating that no IP addresses were found in the DNS records",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "dns_evaluated_on",
+        "dns_had_no_ips",
+        "rdap_evaluated_on",
+        "tls_evaluated_on"
+      ]
+    },
+    "ip_data": {
+      "title": "IP Data",
+      "description": "Array of data objects capturing the IP addresses related to the domain name",
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "ip": {
+                "type": "string"
+              },
+              "from_record": {
+                "type": "string"
+              },
+              "remarks": {
+                "type": "object",
+                "properties": {
+                  "rdap_evaluated_on": {
+                    "type": "object",
+                    "properties": {
+                      "$date": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "$date"
+                    ]
+                  },
+                  "asn_evaluated_on": {
+                    "type": "object",
+                    "properties": {
+                      "$date": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "$date"
+                    ]
+                  },
+                  "geo_evaluated_on": {
+                    "type": "object",
+                    "properties": {
+                      "$date": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "$date"
+                    ]
+                  },
+                  "icmp_evaluated_on": {
+                    "anyOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "$date": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "$date"
+                        ]
+                      }
+                    ]
+                  },
+                  "is_alive": {
+                    "type": "boolean"
+                  },
+                  "average_rtt": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "asn_evaluated_on",
+                  "average_rtt",
+                  "geo_evaluated_on",
+                  "icmp_evaluated_on",
+                  "is_alive",
+                  "rdap_evaluated_on"
+                ]
+              },
+              "rdap": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "handle": {
+                        "type": "string"
+                      },
+                      "parent_handle": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "whois_server": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "terms_of_service_url": {
+                        "type": "string"
+                      },
+                      "copyright_notice": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "last_changed_date": {
+                        "anyOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "$date": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "$date"
+                            ]
+                          }
+                        ]
+                      },
+                      "registration_date": {
+                        "anyOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "$date": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "$date"
+                            ]
+                          }
+                        ]
+                      },
+                      "expiration_date": {
+                        "type": "null"
+                      },
+                      "url": {
+                        "type": "string"
+                      },
+                      "rir": {
+                        "type": "string"
+                      },
+                      "entities": {
+                        "type": "object",
+                        "properties": {
+                          "registrant": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "handle": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                },
+                                "whois_server": {
+                                  "type": "string"
+                                },
+                                "rir": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "email": {
+                                  "type": "string"
+                                },
+                                "tel": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "handle",
+                                "type"
+                              ]
+                            }
+                          },
+                          "noc": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "handle": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                },
+                                "whois_server": {
+                                  "type": "string"
+                                },
+                                "rir": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "email": {
+                                  "type": "string"
+                                },
+                                "tel": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "email",
+                                "handle",
+                                "name",
+                                "rir",
+                                "tel",
+                                "type",
+                                "url",
+                                "whois_server"
+                              ]
+                            }
+                          },
+                          "technical": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "handle": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                },
+                                "whois_server": {
+                                  "type": "string"
+                                },
+                                "rir": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "email": {
+                                  "type": "string"
+                                },
+                                "tel": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "handle",
+                                "type"
+                              ]
+                            }
+                          },
+                          "administrative": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "handle": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                },
+                                "whois_server": {
+                                  "type": "string"
+                                },
+                                "rir": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "email": {
+                                  "type": "string"
+                                },
+                                "tel": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "handle",
+                                "type"
+                              ]
+                            }
+                          },
+                          "abuse": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "handle": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                },
+                                "whois_server": {
+                                  "type": "string"
+                                },
+                                "rir": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "email": {
+                                  "type": "string"
+                                },
+                                "tel": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "handle",
+                                "name",
+                                "type"
+                              ]
+                            }
+                          },
+                          "routing": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "handle": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                },
+                                "whois_server": {
+                                  "type": "string"
+                                },
+                                "rir": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "email": {
+                                  "type": "string"
+                                },
+                                "tel": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "email",
+                                "handle",
+                                "name",
+                                "rir",
+                                "tel",
+                                "type",
+                                "url",
+                                "whois_server"
+                              ]
+                            }
+                          },
+                          "dns": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "handle": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                },
+                                "whois_server": {
+                                  "type": "string"
+                                },
+                                "rir": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "email": {
+                                  "type": "string"
+                                },
+                                "tel": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "email",
+                                "handle",
+                                "name",
+                                "rir",
+                                "tel",
+                                "type",
+                                "url",
+                                "whois_server"
+                              ]
+                            }
+                          },
+                          "registrar": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "handle": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "handle",
+                                "name",
+                                "type"
+                              ]
+                            }
+                          }
+                        }
+                      },
+                      "country": {
+                        "type": "string"
+                      },
+                      "ip_version": {
+                        "type": "integer"
+                      },
+                      "assignment_type": {
+                        "type": "string"
+                      },
+                      "network": {
+                        "type": "object",
+                        "properties": {
+                          "prefix_length": {
+                            "type": "integer"
+                          },
+                          "network_address": {
+                            "type": "string"
+                          },
+                          "netmask": {
+                            "type": "string"
+                          },
+                          "broadcast_address": {
+                            "type": "string"
+                          },
+                          "hostmask": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "broadcast_address",
+                          "hostmask",
+                          "netmask",
+                          "network_address",
+                          "prefix_length"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "assignment_type",
+                      "copyright_notice",
+                      "country",
+                      "description",
+                      "entities",
+                      "expiration_date",
+                      "handle",
+                      "ip_version",
+                      "last_changed_date",
+                      "name",
+                      "network",
+                      "parent_handle",
+                      "registration_date",
+                      "rir",
+                      "terms_of_service_url",
+                      "type",
+                      "url",
+                      "whois_server"
+                    ]
+                  }
+                ]
+              },
+              "asn": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "asn": {
+                        "type": "integer"
+                      },
+                      "as_org": {
+                        "type": "string"
+                      },
+                      "network_address": {
+                        "type": "string"
+                      },
+                      "prefix_len": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "as_org",
+                      "asn",
+                      "network_address",
+                      "prefix_len"
+                    ]
+                  }
+                ]
+              },
+              "geo": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "country": {
+                        "type": [
+                          "null",
+                          "string"
+                        ]
+                      },
+                      "country_code": {
+                        "type": [
+                          "null",
+                          "string"
+                        ]
+                      },
+                      "region": {
+                        "type": [
+                          "null",
+                          "string"
+                        ]
+                      },
+                      "region_code": {
+                        "type": [
+                          "null",
+                          "string"
+                        ]
+                      },
+                      "city": {
+                        "type": [
+                          "null",
+                          "string"
+                        ]
+                      },
+                      "postal_code": {
+                        "type": [
+                          "null",
+                          "string"
+                        ]
+                      },
+                      "latitude": {
+                        "type": [
+                          "null",
+                          "number"
+                        ]
+                      },
+                      "longitude": {
+                        "type": [
+                          "null",
+                          "number"
+                        ]
+                      },
+                      "timezone": {
+                        "type": [
+                          "null",
+                          "string"
+                        ]
+                      },
+                      "isp": {
+                        "type": "null"
+                      },
+                      "org": {
+                        "type": "null"
+                      }
+                    },
+                    "required": [
+                      "city",
+                      "country",
+                      "country_code",
+                      "isp",
+                      "latitude",
+                      "longitude",
+                      "org",
+                      "postal_code",
+                      "region",
+                      "region_code",
+                      "timezone"
+                    ]
+                  }
+                ]
+              }
+            },
+            "required": [
+              "asn",
+              "from_record",
+              "geo",
+              "ip",
+              "rdap",
+              "remarks"
+            ]
+          }
+        }
+      ]
+    },
+    "label": {
+      "description": "An unused field whose value should not be relied upon",
+      "deprecated": true,
+      "type": "string"
+    },
+    "category": {
+      "description": "An unused field whose value should not be relied upon",
+      "deprecated": true,
+      "type": "string"
+    }
+  },
+  "required": [
+    "domain_name",
+    "url",
+    "evaluated_on",
+    "source",
+    "sourced_on",
+    "dns",
+    "rdap",
+    "tls",
+    "ip_data",
+    "remarks"
+  ],
+  "$defs": {
+    "dnssecType": {
+      "type": "integer",
+      "enum": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "description": "0 = no RRsig found, 1 = RRsig corresponds to the local DNSKEY, 2 = RRsig does not correspond to the key, 3 = no DNSKEY found in the domain"
+    },
+    "resolvedRecordSourceType": {
+      "type": "integer",
+      "enum": [
+        0,
+        1,
+        2
+      ],
+      "description": "0 = resolved from the primary nameserver, 1 = resolved through a public recursive resolver, 2 = not found"
+    },
+    "rdapEntity": {
+      "title": "RDAP Entity",
+      "description": "An entity fetched from RDAP. If WHOIS was used, only 'name' or 'email' will be present. Refer to the RDAP RFCs for more information on the possible fields and their meanings.",
+      "type": "object",
+      "properties": {
+        "handle": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  }
+}
