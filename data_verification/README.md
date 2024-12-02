@@ -3,6 +3,13 @@
 
 This document describes the process of verifying domain names using the VirusTotal API. The goal is to determine if domains are malign or benign based on security vendor reports. This verification ensures that our datasets are correctly labeled and can be considered ground truth.
 
+## Repository Contents
+* `example_data` - Contains internet domain names to be verified, which serve as sample datasets for testing and development.  
+* `README.md` - Provides detailed instructions and documentation for setup and usage of the code.  
+* `livetest.sh` - A script for live testing of the domain verification process. 
+* `report_example.pdf` - An example of a report generated from the dataset verification results. 
+* `vt_checker.py` - The Python script responsible for interfacing with the VirusTotal API and validating domains within the datasets. 
+
 ## Overview
 
 The verification process involves checking each domain against the VirusTotal database and applying a threshold to determine its status. A domain is flagged as malign if at least 3 security vendors have reported it as malign or suspicious. A domain is flagged as benign if there are no records for it in VirusTotal.
