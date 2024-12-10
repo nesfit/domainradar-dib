@@ -365,7 +365,6 @@
             "AAAA",
             "CNAME",
             "MX",
-            "NAPTR",
             "NS",
             "SOA",
             "TXT"
@@ -440,7 +439,6 @@
             "AAAA",
             "CNAME",
             "MX",
-            "NAPTR",
             "NS",
             "SOA",
             "TXT"
@@ -480,7 +478,6 @@
             "AAAA",
             "CNAME",
             "MX",
-            "NAPTR",
             "NS",
             "SOA",
             "TXT"
