@@ -42,7 +42,12 @@
     },
     "source": {
       "title": "Entry Source Identifier",
-      "description": "The identifier of the source that provided the domain name",
+      "description": "An identifier of the source that provided the domain name",
+      "type": "string"
+    },
+    "malware": {
+      "title": "Malware Type/Family",
+      "description": "An identifier of the type of malware found at the domain. Never null but the value can be \"unknown\". Only present in the malware dataset.",
       "type": "string"
     },
     "sourced_on": {
@@ -649,21 +654,7 @@
               "type": "boolean"
             }
           },
-          "required": [
-            "copyright_notice",
-            "description",
-            "entities",
-            "expiration_date",
-            "handle",
-            "last_changed_date",
-            "name",
-            "nameservers",
-            "registration_date",
-            "status",
-            "terms_of_service_url",
-            "url",
-            "whois_server"
-          ]
+          "required": []
         }
       ]
     },
@@ -884,7 +875,15 @@
                 "type": "string"
               },
               "from_record": {
-                "type": "string"
+                "description": "The RRtype of the DNS record from which this IP was extracted.",
+                "type": "string",
+                "enum": [
+                  "A",
+                  "AAAA",
+                  "CNAME",
+                  "MX",
+                  "NS"
+                ]
               },
               "remarks": {
                 "type": "object",
@@ -941,6 +940,7 @@
                     ]
                   },
                   "is_alive": {
+                    "description": "True iff we got an ICMP Echo Reply on this IP.",
                     "type": "boolean"
                   },
                   "average_rtt": {
@@ -957,6 +957,8 @@
                 ]
               },
               "rdap": {
+                "title": "RDAP Data",
+                "description": "Data fetched from RDAP. Refer to the RDAP RFCs for more information on their semantics.",
                 "anyOf": [
                   {
                     "type": "null"
@@ -1039,298 +1041,59 @@
                       "entities": {
                         "type": "object",
                         "properties": {
-                          "registrant": {
+                          "registrar": {
                             "type": "array",
                             "items": {
-                              "type": "object",
-                              "properties": {
-                                "handle": {
-                                  "type": "string"
-                                },
-                                "url": {
-                                  "type": "string"
-                                },
-                                "type": {
-                                  "type": "string"
-                                },
-                                "whois_server": {
-                                  "type": "string"
-                                },
-                                "rir": {
-                                  "type": "string"
-                                },
-                                "name": {
-                                  "type": "string"
-                                },
-                                "email": {
-                                  "type": "string"
-                                },
-                                "tel": {
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "handle",
-                                "type"
-                              ]
-                            }
-                          },
-                          "noc": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "handle": {
-                                  "type": "string"
-                                },
-                                "url": {
-                                  "type": "string"
-                                },
-                                "type": {
-                                  "type": "string"
-                                },
-                                "whois_server": {
-                                  "type": "string"
-                                },
-                                "rir": {
-                                  "type": "string"
-                                },
-                                "name": {
-                                  "type": "string"
-                                },
-                                "email": {
-                                  "type": "string"
-                                },
-                                "tel": {
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "email",
-                                "handle",
-                                "name",
-                                "rir",
-                                "tel",
-                                "type",
-                                "url",
-                                "whois_server"
-                              ]
-                            }
-                          },
-                          "technical": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "handle": {
-                                  "type": "string"
-                                },
-                                "url": {
-                                  "type": "string"
-                                },
-                                "type": {
-                                  "type": "string"
-                                },
-                                "whois_server": {
-                                  "type": "string"
-                                },
-                                "rir": {
-                                  "type": "string"
-                                },
-                                "name": {
-                                  "type": "string"
-                                },
-                                "email": {
-                                  "type": "string"
-                                },
-                                "tel": {
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "handle",
-                                "type"
-                              ]
-                            }
-                          },
-                          "administrative": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "handle": {
-                                  "type": "string"
-                                },
-                                "url": {
-                                  "type": "string"
-                                },
-                                "type": {
-                                  "type": "string"
-                                },
-                                "whois_server": {
-                                  "type": "string"
-                                },
-                                "rir": {
-                                  "type": "string"
-                                },
-                                "name": {
-                                  "type": "string"
-                                },
-                                "email": {
-                                  "type": "string"
-                                },
-                                "tel": {
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "handle",
-                                "type"
-                              ]
+                              "$ref": "#/$defs/rdapEntity"
                             }
                           },
                           "abuse": {
                             "type": "array",
                             "items": {
-                              "type": "object",
-                              "properties": {
-                                "handle": {
-                                  "type": "string"
-                                },
-                                "url": {
-                                  "type": "string"
-                                },
-                                "type": {
-                                  "type": "string"
-                                },
-                                "whois_server": {
-                                  "type": "string"
-                                },
-                                "rir": {
-                                  "type": "string"
-                                },
-                                "name": {
-                                  "type": "string"
-                                },
-                                "email": {
-                                  "type": "string"
-                                },
-                                "tel": {
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "handle",
-                                "name",
-                                "type"
-                              ]
+                              "$ref": "#/$defs/rdapEntity"
+                            }
+                          },
+                          "registrant": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/$defs/rdapEntity"
+                            }
+                          },
+                          "noc": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/$defs/rdapEntity"
+                            }
+                          },
+                          "administrative": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/$defs/rdapEntity"
+                            }
+                          },
+                          "technical": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/$defs/rdapEntity"
                             }
                           },
                           "routing": {
                             "type": "array",
                             "items": {
-                              "type": "object",
-                              "properties": {
-                                "handle": {
-                                  "type": "string"
-                                },
-                                "url": {
-                                  "type": "string"
-                                },
-                                "type": {
-                                  "type": "string"
-                                },
-                                "whois_server": {
-                                  "type": "string"
-                                },
-                                "rir": {
-                                  "type": "string"
-                                },
-                                "name": {
-                                  "type": "string"
-                                },
-                                "email": {
-                                  "type": "string"
-                                },
-                                "tel": {
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "email",
-                                "handle",
-                                "name",
-                                "rir",
-                                "tel",
-                                "type",
-                                "url",
-                                "whois_server"
-                              ]
+                              "$ref": "#/$defs/rdapEntity"
                             }
                           },
                           "dns": {
                             "type": "array",
                             "items": {
-                              "type": "object",
-                              "properties": {
-                                "handle": {
-                                  "type": "string"
-                                },
-                                "url": {
-                                  "type": "string"
-                                },
-                                "type": {
-                                  "type": "string"
-                                },
-                                "whois_server": {
-                                  "type": "string"
-                                },
-                                "rir": {
-                                  "type": "string"
-                                },
-                                "name": {
-                                  "type": "string"
-                                },
-                                "email": {
-                                  "type": "string"
-                                },
-                                "tel": {
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "email",
-                                "handle",
-                                "name",
-                                "rir",
-                                "tel",
-                                "type",
-                                "url",
-                                "whois_server"
-                              ]
+                              "$ref": "#/$defs/rdapEntity"
                             }
-                          },
-                          "registrar": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "handle": {
-                                  "type": "string"
-                                },
-                                "type": {
-                                  "type": "string"
-                                },
-                                "name": {
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "handle",
-                                "name",
-                                "type"
-                              ]
-                            }
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/$defs/rdapEntity"
                           }
                         }
                       },
@@ -1371,30 +1134,13 @@
                         ]
                       }
                     },
-                    "required": [
-                      "assignment_type",
-                      "copyright_notice",
-                      "country",
-                      "description",
-                      "entities",
-                      "expiration_date",
-                      "handle",
-                      "ip_version",
-                      "last_changed_date",
-                      "name",
-                      "network",
-                      "parent_handle",
-                      "registration_date",
-                      "rir",
-                      "terms_of_service_url",
-                      "type",
-                      "url",
-                      "whois_server"
-                    ]
+                    "required": []
                   }
                 ]
               },
               "asn": {
+                "title": "Autonomous System Data",
+                "description": "Autonomous system information found in the GeoLite2 ASN database created by MaxMind, available from https://www.maxmind.com.",
                 "anyOf": [
                   {
                     "type": "null"
@@ -1425,6 +1171,8 @@
                 ]
               },
               "geo": {
+                "title": "Geolocation Data",
+                "description": "Geolocation data found in the GeoLite2 City database created by MaxMind, available from https://www.maxmind.com.",
                 "anyOf": [
                   {
                     "type": "null"
@@ -1584,7 +1332,14 @@
         }
       },
       "additionalProperties": {
-        "type": "string"
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
       }
     }
   }
