@@ -7,12 +7,12 @@
 # How to run the Python scripts:
 
 ## 1 - Set up Python Poetry environment (for package dependency compatibility)
-`poetry install`
+`poetry install` \
 `poetry shell`
 
 ## 2 - Edit MongoDB credentials:
 Specify `MONGO_URI`, `MONGO_DB`, and `MONGO_COLLECTION` accordingly.
 
 ## 3 - Run the scripts
-`python3 get_malware_domain_sources.py`
+`python3 get_malware_domain_sources.py` \
 `python3 get_malware_types.py`
